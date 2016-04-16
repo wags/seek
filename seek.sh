@@ -21,17 +21,20 @@ error () {
     exit "$2"
 } >&2
 
-check_reqs()
+check_reqs ()
 {
-  for req in curl jq; do
-    type $req >/dev/null 2>&1 || error "\"$req\" is required but it's not installed. Aborting." 1
-  done
+    for req in curl jq; do
+        type $req >/dev/null 2>&1 || error "\"$req\" is required but it's not installed. Aborting." 1
+    done
+}
+
+set_auth () {
+    AUTH_STRING="Authorization: token $1"
 }
 
 set_vars () {
-    AUTH_STRING="Authorization: token ${GITHUB_ACCESS_TOKEN}"
+    set_auth "${GITHUB_ACCESS_TOKEN}"
     ENDPOINT="https://api.github.com/search/repositories"
-
     YELLOW=$(tput setaf 3)
     BRIGHT=$(tput bold)
     NORMAL=$(tput sgr0)
@@ -86,7 +89,7 @@ while getopts ":s:l:t:" opt; do
             lang=${OPTARG}
             ;;
         t)
-            echo "-t detected with argument: ${OPTARG}"
+            set_auth "${OPTARG}"
             ;;
         :)
             error "Option -${OPTARG} is missing an argument" 2
