@@ -28,6 +28,17 @@ check_reqs()
   done
 }
 
+set_vars () {
+    AUTH_STRING="Authorization: token ${GITHUB_ACCESS_TOKEN}"
+    ENDPOINT="https://api.github.com/search/repositories"
+}
+
+get_data () {
+    # https://api.github.com/search/repositories?q=tetris+language:assembly&sort=stars&order=desc
+    response_data=$(curl -s -G -H "${AUTH_STRING}" "${ENDPOINT}" --data-urlencode "q=${params}")
+    echo "$response_data" | jq ".items[0,1,2,3,4] | {name, description, stargazers_count, forks_count, updated_at}"
+}
+
 while getopts ":s:l:t:" opt; do
     case $opt in
         s)
@@ -51,18 +62,9 @@ done
 # Gets the index of the next argument that getopts was going to handle,
 # then uses that as the value to pass to shift.
 shift $(( OPTIND -1 ))
-echo "remaining input: $1"
+[[ "$@" ]] || error "Oops, no search term was included!" 2
 
-set_vars () {
-    AUTH_STRING="Authorization: token ${GITHUB_ACCESS_TOKEN}"
-}
-
-get_data () {
-    URL="https://api.github.com/search/repositories?q=tetris+language:assembly&sort=stars&order=desc"
-    response_data=$(curl -s -H \
-        "${AUTH_STRING}" "${URL}")
-    echo "$response_data" | jq ".items[0,1,2,3,4] | {name, description, stargazers_count, forks_count, updated_at}"
-}
+params="$*"
 
 check_reqs
 set_vars
