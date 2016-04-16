@@ -31,6 +31,10 @@ check_reqs()
 set_vars () {
     AUTH_STRING="Authorization: token ${GITHUB_ACCESS_TOKEN}"
     ENDPOINT="https://api.github.com/search/repositories"
+
+    YELLOW=$(tput setaf 3)
+    BRIGHT=$(tput bold)
+    NORMAL=$(tput sgr0)
 }
 
 get_data () {
@@ -49,7 +53,19 @@ get_data () {
         -H "${AUTH_STRING}"                  \
         )
 
-    echo "$response_data" | jq ".items[0,1,2,3,4] | {full_name, description, stargazers_count, forks_count, updated_at}"
+    for result in $(seq 0 4); do
+        name=$(echo "$response_data" | jq -r ".items[${result}].full_name")
+        description=$(echo "$response_data" | jq -r ".items[${result}].description")
+        stars=$(echo "$response_data" | jq -r ".items[${result}].stargazers_count")
+        forks=$(echo "$response_data" | jq -r ".items[${result}].forks_count")
+        date=$(echo "$response_data" | jq -r ".items[${result}].updated_at")
+
+        printf "%s\n" "${BRIGHT}${name}${NORMAL}"
+        printf "%s\n" "${description}"
+        printf "${YELLOW}★ %-7s${NORMAL}" "${stars}"
+        printf "Forks: %-7s" "${forks}"
+        printf "Last Updated: %s\n\n" "${date}"
+    done
 }
 
 while getopts ":s:l:t:" opt; do
