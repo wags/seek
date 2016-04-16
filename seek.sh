@@ -5,8 +5,8 @@ usage () {
 quick-search.sh [-s x] [-l x] [-t x] query
 
 Find top repositories for a given query
-    -s: sort by "stars", "forks" or "updated"
-    -l: language
+    -s: sort by "star", "fork" or "date"
+    -l: programming language name
     -t: authorization token (will ask to save it)
 END
 }
@@ -35,17 +35,39 @@ set_vars () {
 
 get_data () {
     # https://api.github.com/search/repositories?q=tetris+language:assembly&sort=stars&order=desc
-    response_data=$(curl -s -G -H "${AUTH_STRING}" "${ENDPOINT}" --data-urlencode "q=${params}")
+
+    if [[ $lang ]]; then
+        params="q=${params} language:${lang}"
+    else
+        params="q=${params}"
+    fi
+
+    response_data=$(curl -s -G "${ENDPOINT}" \
+        --data-urlencode "${params}"         \
+        --data-urlencode "sort=${sort}"      \
+        --data-urlencode "order=desc"        \
+        -H "${AUTH_STRING}"                  \
+        )
+
     echo "$response_data" | jq ".items[0,1,2,3,4] | {name, description, stargazers_count, forks_count, updated_at}"
 }
 
 while getopts ":s:l:t:" opt; do
     case $opt in
         s)
-            echo "-s detected with argument: ${OPTARG}"
+            case ${OPTARG} in
+                star)
+                    sort="stars";;
+                fork)
+                    sort="forks";;
+                date)
+                    sort="updated";;
+                *)
+                    error "Sort parameter \"${OPTARG}\" is invalid." 3;;
+            esac
             ;;
         l)
-            echo "-l detected with argument: ${OPTARG}"
+            lang=${OPTARG}
             ;;
         t)
             echo "-t detected with argument: ${OPTARG}"
