@@ -18,7 +18,7 @@ END
 error () {
     echo "Error: $1"
     usage
-    exit $2
+    exit "$2"
 } >&2
 
 while getopts ":s:l:t:" opt; do
