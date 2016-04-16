@@ -21,6 +21,13 @@ error () {
     exit "$2"
 } >&2
 
+check_reqs()
+{
+  for req in curl jq; do
+    type $req >/dev/null 2>&1 || error "\"$req\" is required but it's not installed. Aborting." 1
+  done
+}
+
 while getopts ":s:l:t:" opt; do
     case $opt in
         s)
@@ -57,6 +64,7 @@ get_data () {
     echo "$response_data" | jq ".items[0,1,2,3,4] | {name, description, stargazers_count, forks_count, updated_at}"
 }
 
+check_reqs
 set_vars
 get_data
 
