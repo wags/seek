@@ -21,11 +21,11 @@ error () {
     exit "$2"
 } >&2
 
-check_reqs()
+check_reqs ()
 {
-  for req in curl jq; do
-    type $req >/dev/null 2>&1 || error "\"$req\" is required but it's not installed. Aborting." 1
-  done
+    for req in curl jq; do
+        type $req >/dev/null 2>&1 || error "\"$req\" is required but it's not installed. Aborting." 1
+    done
 }
 
 set_auth () {
