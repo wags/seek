@@ -56,11 +56,11 @@ while getopts ":s:l:t:" opt; do
     case $opt in
         s)
             case ${OPTARG} in
-                star)
+                star|stars|s)
                     sort="stars";;
-                fork)
+                fork|forks|f)
                     sort="forks";;
-                date)
+                date|updated|d|u)
                     sort="updated";;
                 *)
                     error "Sort parameter \"${OPTARG}\" is invalid." 3;;
