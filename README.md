@@ -39,6 +39,12 @@ While the default search results are great, the full power is unleashed when you
 | `-l x` | **language**: Specify _x_ programming language name to limit results to that language |
 | `-t x` | **token**: Pass your private GitHub access token (_x_) to Seek in order to increase the API rate limit. |
 
+Here's a more elaborate example to try:
+```
+./seek.sh -s star -l assembly tetris
+```
+
+_Now get out there and get searching!_
 
 ## Motivation
 I was drawn to the GitHub search API endpoint because of my love of Elasticsearch, Solr and software built with these technologies. Many tasks can be performed quickly with the command line, but the commands to interact with an API can get unwieldy to piece together. This script makes it simple to work with various parameters and authentication, and gets you the results you're looking for quickly.
