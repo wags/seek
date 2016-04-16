@@ -49,7 +49,7 @@ get_data () {
         -H "${AUTH_STRING}"                  \
         )
 
-    echo "$response_data" | jq ".items[0,1,2,3,4] | {name, description, stargazers_count, forks_count, updated_at}"
+    echo "$response_data" | jq ".items[0,1,2,3,4] | {full_name, description, stargazers_count, forks_count, updated_at}"
 }
 
 while getopts ":s:l:t:" opt; do
