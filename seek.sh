@@ -28,10 +28,13 @@ check_reqs()
   done
 }
 
-set_vars () {
-    AUTH_STRING="Authorization: token ${GITHUB_ACCESS_TOKEN}"
-    ENDPOINT="https://api.github.com/search/repositories"
+set_auth () {
+    AUTH_STRING="Authorization: token $1"
+}
 
+set_vars () {
+    set_auth "${GITHUB_ACCESS_TOKEN}"
+    ENDPOINT="https://api.github.com/search/repositories"
     YELLOW=$(tput setaf 3)
     BRIGHT=$(tput bold)
     NORMAL=$(tput sgr0)
@@ -86,7 +89,7 @@ while getopts ":s:l:t:" opt; do
             lang=${OPTARG}
             ;;
         t)
-            echo "-t detected with argument: ${OPTARG}"
+            set_auth "${OPTARG}"
             ;;
         :)
             error "Option -${OPTARG} is missing an argument" 2

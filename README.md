@@ -14,6 +14,12 @@ Seek is a Bash script that allows you to search for repositories on GitHub from 
 * `jq`: Used to parse the JSON response from the API. The easiest way to install it on a Mac is with [Homebrew](http://brew.sh/). Just run `brew install jq`. Otherwise, follow the guide [here](https://stedolan.github.io/jq/download).
 * A GitHub access token. This is optional, but providing one will allow you to search much more frequently before rate limiting kicks in. It's super easy [to generate one](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)!
 
+To save your GitHub token to an environment variable for this script to access, use the following command.
+```
+export GITHUB_ACCESS_TOKEN=your-secret-token
+```
+Otherwise, you will have to pass it every time (cumbersome) due to the fact that a script cannot set a value in its parent's environment. 
+
 ## Usage
 First, make sure the script has execute permissions:
 ```
