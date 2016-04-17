@@ -18,7 +18,7 @@ To save your GitHub token to an environment variable for this script to access, 
 ```
 export GITHUB_ACCESS_TOKEN=your-secret-token
 ```
-Otherwise, you will have to pass it every time (cumbersome) due to the fact that a script cannot set a value in its parent's environment. 
+Otherwise, you will have to pass it every time (cumbersome) due to the fact that a script cannot set a value in its parent's environment.
 
 ## Usage
 First, make sure the script has execute permissions:
@@ -35,9 +35,10 @@ While the default search results are great, the full power is unleashed when you
 
 | Option | Description |
 | :----: | :---------- |
-| `-s x` | **sort**: Tell Seek how you'd like to sort the results. Valid options for _x_ are `star`, `fork`, and `date` (descending)
+| `-s x` | **sort**: Tell Seek how you'd like to sort the results. Valid options for _x_ are `star`, `fork`, and `date` (descending) |
 | `-l x` | **language**: Specify _x_ programming language name to limit results to that language |
 | `-t x` | **token**: Pass your private GitHub access token (_x_) to Seek in order to increase the API rate limit. |
+| `-h`   | **help**: Display the usage screen |
 
 Here's a more elaborate example to try:
 ```

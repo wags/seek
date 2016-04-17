@@ -8,6 +8,7 @@ Find top repositories for a given query
     -s: sort by "star", "fork" or "date"
     -l: programming language name
     -t: authorization token (will ask to save it)
+    -h: show this help screen
 END
 }
 
@@ -71,7 +72,7 @@ get_data () {
     done
 }
 
-while getopts ":s:l:t:" opt; do
+while getopts ":s:l:t:h" opt; do
     case $opt in
         s)
             case ${OPTARG} in
@@ -90,6 +91,10 @@ while getopts ":s:l:t:" opt; do
             ;;
         t)
             set_auth "${OPTARG}"
+            ;;
+        h)
+            usage
+            exit 0
             ;;
         :)
             error "Option -${OPTARG} is missing an argument" 2
