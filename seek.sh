@@ -57,12 +57,24 @@ get_data () {
         -H "${AUTH_STRING}"                  \
         )
 
-    for result in $(seq 0 4); do
-        name=$(echo "$response_data" | jq -r ".items[${result}].full_name")
-        description=$(echo "$response_data" | jq -r ".items[${result}].description")
-        stars=$(echo "$response_data" | jq -r ".items[${result}].stargazers_count")
-        forks=$(echo "$response_data" | jq -r ".items[${result}].forks_count")
-        date=$(echo "$response_data" | jq -r ".items[${result}].updated_at")
+    # Get the result count and redirect the jq error to /dev/null:
+    #    "jq: error (at <stdin>:2676): boolean (false) has no length"
+    result_count=$(echo "$response_data" | jq ".[] | length" 2>/dev/null)
+
+    # Generate an error and exit if there are no results
+    [[ $result_count != 0 ]] || { echo "Sorry, no results found!"; exit 1; }
+
+    limit=5
+    if (( result_count < 5 )); then
+        limit=$result_count
+    fi
+
+    for (( i=0; i<limit; ++i )); do
+        name=$(echo "$response_data" | jq -r ".items[${i}].full_name")
+        description=$(echo "$response_data" | jq -r ".items[${i}].description")
+        stars=$(echo "$response_data" | jq -r ".items[${i}].stargazers_count")
+        forks=$(echo "$response_data" | jq -r ".items[${i}].forks_count")
+        date=$(echo "$response_data" | jq -r ".items[${i}].updated_at")
 
         printf "%s\n" "${BRIGHT}${name}${NORMAL}"
         printf "%s\n" "${description}"
