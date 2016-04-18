@@ -76,6 +76,9 @@ get_data () {
         forks=$(echo "$response_data" | jq -r ".items[${i}].forks_count")
         date=$(echo "$response_data" | jq -r ".items[${i}].updated_at")
 
+        # Convert ISO 8601 format to a friendly date & time
+        date=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "${date}" +"%m/%d/%Y at %H:%M:%S")
+
         printf "%s\n" "${BRIGHT}${name}${NORMAL}"
         printf "%s\n" "${description}"
         printf "${YELLOW}★ %-7s${NORMAL}" "${stars}"
